@@ -1,0 +1,9 @@
+
+* Установка create-react-app:
+
+npm i -g create-react-app
+
+
+* Полезное расширение для VS Code:
+
+Simple React Snippets
