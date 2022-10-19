@@ -4,7 +4,7 @@ class Counter extends Component {
 
     state = {
         count: 0,
-        imageUrl: 'https://source.unsplash.com/200x200/?computer',
+        imageUrl: 'https://source.unsplash.com/240x240/?computer',
         tags: ['JS', 'HTML', 'CSS'],
 
     };
