@@ -21,11 +21,11 @@ class Counter extends Component {
         return (
             <React.Fragment>
                 <img src={this.state.imageUrl} alt="" />
-                <h1>Hello React!</h1>
+                <h1>Счетчик кликов</h1>
                 <span className={classes}>{this.formatCount()}</span>
-                <button onClick={this.handleIncrement} className="btn btn-secondary btn-sm">Increment</button>
+                <button onClick={this.handleIncrement} className="btn btn-secondary btn-sm">Клик</button>
                 <ul>
-                    { this.state.tags.map( tag => <li key={tag}>{tag}</li>) }
+                    { this.state.tags.map( tag => <li key={tag} >{tag}</li>) }
                 </ul>
             </React.Fragment>
         );
