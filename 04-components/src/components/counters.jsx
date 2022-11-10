@@ -13,6 +13,27 @@ class Counters extends Component {
         ]
     };
 
+
+    handleIncrement = (counter) => {
+        // console.log('Клик!', counter)
+
+        const counters = [...this.state.counters];
+        const index = counters.indexOf(counter);
+        counters[index].value++;
+        // console.log(counters[index]);
+        this.setState({ counters })
+    };
+
+
+    handleReset = () => {
+        const counters = this.state.counters.map(c => {
+            c.value = 0;
+            return c;
+        });
+
+        this.setState({ counters });
+    }
+
     handleDelete = (counterId) => {
         // console.log('Удаляем компонент!', counterId)
         const counters = this.state.counters.filter(c => c.id !== counterId)
@@ -22,13 +43,16 @@ class Counters extends Component {
     render() {
         return (
             <div>
+                <h1 className="display-1">Кликни меня!</h1>
+                <button className="btn btn-primary btn-sm m-2" onClick={this.handleReset}>Сброс</button>
                 {this.state.counters.map(counter =>
                     <Counter 
                         key={counter.id} 
                         counter={counter}
-                        onDelete={this.handleDelete}>
+                        onDelete={this.handleDelete}
+                        onIncrement={this.handleIncrement}>
 
-                        <h4>Счетчик {counter.id}</h4>
+                        <h4 className='lead mt-3'>Счетчик {counter.id}</h4>
 
                     </Counter>)}
             </div>);
