@@ -17,7 +17,8 @@ class Counters extends Component {
                         key={counter.id} 
                         counter={counter}
                         onDelete={this.props.onDelete}
-                        onIncrement={this.props.onIncrement}>
+                        onIncrement={this.props.onIncrement}
+                        onDecrement={this.props.onDecrement}>
 
                         <h4 className='lead mt-3'>Счетчик {counter.id}</h4>
 
