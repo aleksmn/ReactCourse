@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { getBooks } from '../services/bookService';
 import Like from './common/like';
+import Pagination from './common/pagination';
 
 // imrc - shortcut create react component
 // cc - create class
@@ -9,7 +10,8 @@ import Like from './common/like';
 
 class Books extends Component {
   state = {
-    books: getBooks()
+    books: getBooks(),
+    pageSize: 4
   };
 
   handleDelete = (book) => {
@@ -23,13 +25,18 @@ class Books extends Component {
 
     const books = [...this.state.books];
     const index = books.indexOf(book);
-    books[index] = {...books[index]};
+    books[index] = { ...books[index] };
     books[index].liked = !books[index].liked;
     this.setState({ books })
-    
+
+  }
+
+  handlePageChange = page => {
+    console.log(page)
   }
 
   render() {
+
     if (this.state.books.length === 0) return <p>Здесь нет ни одной книги :(</p>
 
     return (
@@ -53,13 +60,18 @@ class Books extends Component {
                 <td>{book.genre.name}</td>
                 <td>{book.pages}</td>
                 <td>
-                  <Like liked={book.liked} onLikeToggle={() => this.handleLike(book)}/>
+                  <Like liked={book.liked} onLikeToggle={() => this.handleLike(book)} />
                 </td>
                 <td><button onClick={() => this.handleDelete(book)} className="btn btn-danger btn-sm">Удалить</button></td>
               </tr>
             ))}
           </tbody>
         </table>
+        <Pagination
+          itemsCount={this.state.books.length}
+          pageSize={this.state.pageSize}
+          onPageChnge={this.handlePageChange}
+        />
       </React.Fragment>);
   }
 }
