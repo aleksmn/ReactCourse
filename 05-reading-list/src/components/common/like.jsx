@@ -1,9 +1,8 @@
-// import React from 'react';
 
-// imr
 // sfc
 
 // Stateless Function Component
+
 
 const Like = (props) => {
 
