@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { getBooks } from '../services/bookService';
 import Like from './common/like';
 import Pagination from './common/pagination';
+import { paginate } from '../utils/paginate'
 
 // imrc - shortcut create react component
 // cc - create class
@@ -41,6 +42,8 @@ class Books extends Component {
 
     if (this.state.books.length === 0) return <p>Здесь нет ни одной книги :(</p>
 
+    const books = paginate(this.state.books, this.state.currentPage, this.state.pageSize)
+
     return (
       <React.Fragment>
         <p>В списке книг: {this.state.books.length}</p>
@@ -55,7 +58,7 @@ class Books extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.books.map(book => (
+            {books.map(book => (
               <tr key={book._id}>
                 <td>{book.title}</td>
                 <td>{book.author}</td>
