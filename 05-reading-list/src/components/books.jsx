@@ -11,11 +11,12 @@ import Pagination from './common/pagination';
 class Books extends Component {
   state = {
     books: getBooks(),
-    pageSize: 4
+    pageSize: 4,
+    currentPage: 1
   };
 
   handleDelete = (book) => {
-    console.log(book)
+    // console.log(book)
     const books = this.state.books.filter(b => b._id !== book._id)
     this.setState({ books: books })
   }
@@ -32,7 +33,8 @@ class Books extends Component {
   }
 
   handlePageChange = page => {
-    console.log(page)
+    // console.log(page);
+    this.setState({ currentPage: page });
   }
 
   render() {
@@ -70,7 +72,8 @@ class Books extends Component {
         <Pagination
           itemsCount={this.state.books.length}
           pageSize={this.state.pageSize}
-          onPageChnge={this.handlePageChange}
+          onPageChange={this.handlePageChange}
+          currentPage={this.state.currentPage}
         />
       </React.Fragment>);
   }
