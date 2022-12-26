@@ -4,7 +4,7 @@ import { getGenres } from '../services/genreService';
 import Like from './common/like';
 import ListGroup from './common/listGroup';
 import Pagination from './common/pagination';
-import { paginate } from '../utils/paginate'
+import { paginate } from '../utils/paginate';
 
 // imrc - shortcut create react component
 // cc - create class
@@ -18,7 +18,8 @@ class Books extends Component {
   };
 
   componentDidMount() {
-    this.setState({ books: getBooks(), genres: getGenres() });
+    const genres = [{ name: 'Все жанры', _id: 0 }, ...getGenres()]
+    this.setState({ books: getBooks(), genres: genres });
   }
 
   handleDelete = (book) => {
@@ -45,24 +46,34 @@ class Books extends Component {
 
 
   handleGenreSelect = genre => {
-    console.log(genre)
+    // console.log(genre);
+
+    this.setState({ selectedGenre: genre, currentPage: 1 })
   }
 
   render() {
 
     if (this.state.books.length === 0) return <p>Здесь нет ни одной книги :(</p>
 
-    const books = paginate(this.state.books, this.state.currentPage, this.state.pageSize)
+    const filteredBooks = this.state.selectedGenre && this.state.selectedGenre._id
+      ? this.state.books.filter(m => m.genre._id === this.state.selectedGenre._id)
+      : this.state.books;
+
+    const books = paginate(filteredBooks, this.state.currentPage, this.state.pageSize);
 
     return (
       <div className='row'>
         <div className="col-2 my-5">
-          <ListGroup items={this.state.genres} onItemSelect={this.handleGenreSelect}/>
+          <ListGroup
+            items={this.state.genres}
+            onItemSelect={this.handleGenreSelect}
+            selectedItem={this.state.selectedGenre}
+          />
 
 
         </div>
         <div className="col">
-          <p>В списке книг: {this.state.books.length}</p>
+          <p>В списке книг: {filteredBooks.length}</p>
           <table className="table">
             <thead>
               <tr>
@@ -89,7 +100,7 @@ class Books extends Component {
             </tbody>
           </table>
           <Pagination
-            itemsCount={this.state.books.length}
+            itemsCount={filteredBooks.length}
             pageSize={this.state.pageSize}
             onPageChange={this.handlePageChange}
             currentPage={this.state.currentPage}
