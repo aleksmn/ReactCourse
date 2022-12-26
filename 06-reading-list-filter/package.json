@@ -1,5 +1,5 @@
 {
-  "name": "03-reading-list",
+  "name": "06-reading-list-with-filter",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

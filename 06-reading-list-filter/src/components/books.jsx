@@ -1,20 +1,25 @@
 import React, { Component } from 'react';
 import { getBooks } from '../services/bookService';
+import { getGenres } from '../services/genreService';
 import Like from './common/like';
+import ListGroup from './common/listGroup';
 import Pagination from './common/pagination';
 import { paginate } from '../utils/paginate'
 
 // imrc - shortcut create react component
 // cc - create class
 
-
-
 class Books extends Component {
   state = {
-    books: getBooks(),
+    books: [],
+    genres: [],
     pageSize: 4,
     currentPage: 1
   };
+
+  componentDidMount() {
+    this.setState({ books: getBooks(), genres: getGenres() });
+  }
 
   handleDelete = (book) => {
     // console.log(book)
@@ -38,6 +43,11 @@ class Books extends Component {
     this.setState({ currentPage: page });
   }
 
+
+  handleGenreSelect = genre => {
+    console.log(genre)
+  }
+
   render() {
 
     if (this.state.books.length === 0) return <p>Здесь нет ни одной книги :(</p>
@@ -45,40 +55,47 @@ class Books extends Component {
     const books = paginate(this.state.books, this.state.currentPage, this.state.pageSize)
 
     return (
-      <React.Fragment>
-        <p>В списке книг: {this.state.books.length}</p>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Название</th>
-              <th>Автор</th>
-              <th>Жанр</th>
-              <th>Стр.</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {books.map(book => (
-              <tr key={book._id}>
-                <td>{book.title}</td>
-                <td>{book.author}</td>
-                <td>{book.genre.name}</td>
-                <td>{book.pages}</td>
-                <td>
-                  <Like liked={book.liked} onLikeToggle={() => this.handleLike(book)} />
-                </td>
-                <td><button onClick={() => this.handleDelete(book)} className="btn btn-danger btn-sm">Удалить</button></td>
+      <div className='row'>
+        <div className="col-2 my-5">
+          <ListGroup items={this.state.genres} onItemSelect={this.handleGenreSelect}/>
+
+
+        </div>
+        <div className="col">
+          <p>В списке книг: {this.state.books.length}</p>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Название</th>
+                <th>Автор</th>
+                <th>Жанр</th>
+                <th>Стр.</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <Pagination
-          itemsCount={this.state.books.length}
-          pageSize={this.state.pageSize}
-          onPageChange={this.handlePageChange}
-          currentPage={this.state.currentPage}
-        />
-      </React.Fragment>);
+            </thead>
+            <tbody>
+              {books.map(book => (
+                <tr key={book._id}>
+                  <td>{book.title}</td>
+                  <td>{book.author}</td>
+                  <td>{book.genre.name}</td>
+                  <td>{book.pages}</td>
+                  <td>
+                    <Like liked={book.liked} onLikeToggle={() => this.handleLike(book)} />
+                  </td>
+                  <td><button onClick={() => this.handleDelete(book)} className="btn btn-danger btn-sm">Удалить</button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <Pagination
+            itemsCount={this.state.books.length}
+            pageSize={this.state.pageSize}
+            onPageChange={this.handlePageChange}
+            currentPage={this.state.currentPage}
+          />
+        </div>
+      </div>);
   }
 }
 
