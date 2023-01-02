@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import BooksTable from './booksTable'
 import { getBooks } from '../services/bookService';
 import { getGenres } from '../services/genreService';
-import Like from './common/like';
 import ListGroup from './common/listGroup';
 import Pagination from './common/pagination';
 import { paginate } from '../utils/paginate';
+import _ from 'lodash';
 
 // imrc - shortcut create react component
 // cc - create class
@@ -14,11 +15,12 @@ class Books extends Component {
     books: [],
     genres: [],
     pageSize: 4,
-    currentPage: 1
+    currentPage: 1,
+    sortColumn: { path: 'title', order: 'asc' }
   };
 
   componentDidMount() {
-    const genres = [{ name: 'Все жанры', _id: 0 }, ...getGenres()]
+    const genres = [{ name: 'Все жанры', _id: '' }, ...getGenres()]
     this.setState({ books: getBooks(), genres: genres });
   }
 
@@ -51,15 +53,25 @@ class Books extends Component {
     this.setState({ selectedGenre: genre, currentPage: 1 })
   }
 
+  handleSort = sortColumn => {
+
+    this.setState({ sortColumn, currentPage: 1 });
+  }
+
   render() {
 
     if (this.state.books.length === 0) return <p>Здесь нет ни одной книги :(</p>
 
+    // Filter
     const filteredBooks = this.state.selectedGenre && this.state.selectedGenre._id
       ? this.state.books.filter(m => m.genre._id === this.state.selectedGenre._id)
       : this.state.books;
 
-    const books = paginate(filteredBooks, this.state.currentPage, this.state.pageSize);
+    // Sorting
+    const sortedBooks = _.orderBy(filteredBooks, [this.state.sortColumn.path], [this.state.sortColumn.order])
+
+
+    const books = paginate(sortedBooks, this.state.currentPage, this.state.pageSize);
 
     return (
       <div className='row'>
@@ -69,36 +81,16 @@ class Books extends Component {
             onItemSelect={this.handleGenreSelect}
             selectedItem={this.state.selectedGenre}
           />
-
-
         </div>
         <div className="col">
           <p>В списке книг: {filteredBooks.length}</p>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Название</th>
-                <th>Автор</th>
-                <th>Жанр</th>
-                <th>Стр.</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {books.map(book => (
-                <tr key={book._id}>
-                  <td>{book.title}</td>
-                  <td>{book.author}</td>
-                  <td>{book.genre.name}</td>
-                  <td>{book.pages}</td>
-                  <td>
-                    <Like liked={book.liked} onLikeToggle={() => this.handleLike(book)} />
-                  </td>
-                  <td><button onClick={() => this.handleDelete(book)} className="btn btn-danger btn-sm">Удалить</button></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <BooksTable 
+            books={books}
+            sortColumn={this.state.sortColumn}
+            onLike={this.handleLike}
+            onDelete={this.handleDelete} 
+            onSort={this.handleSort}
+          />
           <Pagination
             itemsCount={filteredBooks.length}
             pageSize={this.state.pageSize}
