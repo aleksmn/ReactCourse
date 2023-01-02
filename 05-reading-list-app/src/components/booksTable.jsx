@@ -17,7 +17,7 @@ class BooksTable extends Component {
     }
 
     this.props.onSort(sortColumn);
-    
+
   }
 
   render() {
@@ -32,6 +32,7 @@ class BooksTable extends Component {
             <th onClick={() => this.raiseSort('author')}>Автор</th>
             <th onClick={() => this.raiseSort('genre.name')}>Жанр</th>
             <th onClick={() => this.raiseSort('pages')}>Стр.</th>
+            <th></th>
             <th></th>
           </tr>
         </thead>
