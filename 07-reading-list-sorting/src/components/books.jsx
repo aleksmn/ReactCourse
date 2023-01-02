@@ -5,6 +5,7 @@ import { getGenres } from '../services/genreService';
 import ListGroup from './common/listGroup';
 import Pagination from './common/pagination';
 import { paginate } from '../utils/paginate';
+import _ from 'lodash';
 
 // imrc - shortcut create react component
 // cc - create class
@@ -14,7 +15,8 @@ class Books extends Component {
     books: [],
     genres: [],
     pageSize: 4,
-    currentPage: 1
+    currentPage: 1,
+    sortColumn: { path: 'title', order: 'asc' }
   };
 
   componentDidMount() {
@@ -51,19 +53,25 @@ class Books extends Component {
     this.setState({ selectedGenre: genre, currentPage: 1 })
   }
 
-  handleSort = path => {
-    console.log(path)
+  handleSort = sortColumn => {
+
+    this.setState({ sortColumn, currentPage: 1 });
   }
 
   render() {
 
     if (this.state.books.length === 0) return <p>Здесь нет ни одной книги :(</p>
 
+    // Filter
     const filteredBooks = this.state.selectedGenre && this.state.selectedGenre._id
       ? this.state.books.filter(m => m.genre._id === this.state.selectedGenre._id)
       : this.state.books;
 
-    const books = paginate(filteredBooks, this.state.currentPage, this.state.pageSize);
+    // Sorting
+    const sortedBooks = _.orderBy(filteredBooks, [this.state.sortColumn.path], [this.state.sortColumn.order])
+
+
+    const books = paginate(sortedBooks, this.state.currentPage, this.state.pageSize);
 
     return (
       <div className='row'>
@@ -78,6 +86,7 @@ class Books extends Component {
           <p>В списке книг: {filteredBooks.length}</p>
           <BooksTable 
             books={books}
+            sortColumn={this.state.sortColumn}
             onLike={this.handleLike}
             onDelete={this.handleDelete} 
             onSort={this.handleSort}
