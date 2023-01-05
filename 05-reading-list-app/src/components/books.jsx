@@ -75,7 +75,7 @@ class Books extends Component {
 
     return (
       <div className='row'>
-        <div className="col-2 my-5">
+        <div className="col-lg-2 my-5">
           <ListGroup
             items={this.state.genres}
             onItemSelect={this.handleGenreSelect}
