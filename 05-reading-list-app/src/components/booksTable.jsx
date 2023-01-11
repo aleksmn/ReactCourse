@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import TableHeader from './common/tableHeader';
 import Like from './common/like';
-import TableBody from './common/tableBody';
-
+import Table from './common/table';
 class BooksTable extends Component {
   columns = [
     { path: 'title', label: 'Название' },
@@ -15,19 +13,19 @@ class BooksTable extends Component {
     { key: 'delete', content: book => <button onClick={() => this.props.onDelete(book)} className="btn btn-danger btn-sm">Удалить</button> }
   ];
 
-  
+
 
   render() {
 
     const { books, onSort, sortColumn } = this.props;
 
     return (
-      <table className="table">
-        <TableHeader columns={this.columns} sortColumn={sortColumn} onSort={onSort} />
-
-        <TableBody data={books} columns={this.columns} />
-
-      </table>
+      <Table
+        data={books}
+        columns={this.columns}
+        sortColumn={sortColumn}
+        onSort={onSort}
+      />
     );
   }
 }
