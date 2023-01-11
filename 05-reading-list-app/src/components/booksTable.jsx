@@ -15,8 +15,9 @@ class BooksTable extends Component {
     { key: 'delete', content: book => <button onClick={() => this.props.onDelete(book)} className="btn btn-danger btn-sm">Удалить</button> }
   ];
 
-  render() {
+  
 
+  render() {
 
     const { books, onSort, sortColumn } = this.props;
 
@@ -26,20 +27,6 @@ class BooksTable extends Component {
 
         <TableBody data={books} columns={this.columns} />
 
-        {/* <tbody>
-          {books.map(book => (
-            <tr key={book._id}>
-              <td>{book.title}</td>
-              <td>{book.author}</td>
-              <td>{book.genre.name}</td>
-              <td>{book.pages}</td>
-              <td>
-                <Like liked={book.liked} onLikeToggle={() => onLike(book)} />
-              </td>
-              <td><button onClick={() => onDelete(book)} className="btn btn-danger btn-sm">Удалить</button></td>
-            </tr>
-          ))}
-        </tbody> */}
       </table>
     );
   }
