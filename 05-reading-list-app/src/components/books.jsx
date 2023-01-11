@@ -58,20 +58,26 @@ class Books extends Component {
     this.setState({ sortColumn, currentPage: 1 });
   }
 
+  getPagedData = () => {
+
+    const { books, selectedGenre, sortColumn, currentPage, pageSize } = this.state;
+
+    const filteredBooks = selectedGenre && selectedGenre._id
+      ? books.filter(m => m.genre._id === selectedGenre._id)
+      : books;
+
+    const sortedBooks = _.orderBy(filteredBooks, [sortColumn.path], [sortColumn.order])
+
+    const pagedBooks = paginate(sortedBooks, currentPage, pageSize);
+
+    return { totalCount: filteredBooks.length, books: pagedBooks  }
+  }
+
   render() {
 
     if (this.state.books.length === 0) return <p>Здесь нет ни одной книги :(</p>
 
-    // Filter
-    const filteredBooks = this.state.selectedGenre && this.state.selectedGenre._id
-      ? this.state.books.filter(m => m.genre._id === this.state.selectedGenre._id)
-      : this.state.books;
-
-    // Sorting
-    const sortedBooks = _.orderBy(filteredBooks, [this.state.sortColumn.path], [this.state.sortColumn.order])
-
-
-    const books = paginate(sortedBooks, this.state.currentPage, this.state.pageSize);
+    const result = this.getPagedData()
 
     return (
       <div className='row'>
@@ -83,16 +89,16 @@ class Books extends Component {
           />
         </div>
         <div className="col">
-          <p>В списке книг: {filteredBooks.length}</p>
+          <p>В списке книг: {result.totalCount}</p>
           <BooksTable 
-            books={books}
+            books={result.books}
             sortColumn={this.state.sortColumn}
             onLike={this.handleLike}
             onDelete={this.handleDelete} 
             onSort={this.handleSort}
           />
           <Pagination
-            itemsCount={filteredBooks.length}
+            itemsCount={result.totalCount}
             pageSize={this.state.pageSize}
             onPageChange={this.handlePageChange}
             currentPage={this.state.currentPage}
