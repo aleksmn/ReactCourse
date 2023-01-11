@@ -75,6 +75,8 @@ class Books extends Component {
 
   render() {
 
+    const { genres, selectedGenre, sortColumn, currentPage, pageSize } = this.state;
+
     if (this.state.books.length === 0) return <p>Здесь нет ни одной книги :(</p>
 
     const result = this.getPagedData()
@@ -83,25 +85,25 @@ class Books extends Component {
       <div className='row'>
         <div className="col-lg-2 my-5">
           <ListGroup
-            items={this.state.genres}
+            items={genres}
             onItemSelect={this.handleGenreSelect}
-            selectedItem={this.state.selectedGenre}
+            selectedItem={selectedGenre}
           />
         </div>
         <div className="col">
           <p>В списке книг: {result.totalCount}</p>
           <BooksTable 
             books={result.books}
-            sortColumn={this.state.sortColumn}
+            sortColumn={sortColumn}
             onLike={this.handleLike}
             onDelete={this.handleDelete} 
             onSort={this.handleSort}
           />
           <Pagination
             itemsCount={result.totalCount}
-            pageSize={this.state.pageSize}
+            pageSize={pageSize}
             onPageChange={this.handlePageChange}
-            currentPage={this.state.currentPage}
+            currentPage={currentPage}
           />
         </div>
       </div>);
