@@ -3,6 +3,8 @@
 
 npm i -g create-react-app
 
+npx create-react-app example-app-1
+
 
 * Полезное расширение для VS Code:
 
