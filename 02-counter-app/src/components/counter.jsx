@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 
 class Counter extends Component {
-
+    // state - состояние компонента
     state = {
         count: 0,
-        imageUrl: 'https://source.unsplash.com/240x240/?computer',
         tags: ['JS', 'HTML', 'CSS'],
-
     };
 
     handleIncrement = () => {
@@ -15,14 +13,11 @@ class Counter extends Component {
     }
 
     render() {
-        let classes = "badge m-2 ";
-        classes += this.state.count === 0 ? "text-bg-warning" : "text-bg-primary"
+        let classes = this.state.count === 0 ? "badge m-2 text-bg-warning" : "badge m-2 text-bg-primary"
 
         return (
             <React.Fragment>
-                <img src={this.state.imageUrl} alt="" />
-                <h1>Счетчик кликов</h1>
-                <span className={classes}>{this.formatCount()}</span>
+                <span className={classes}>{this.state.count}</span>
                 <button onClick={this.handleIncrement} className="btn btn-secondary btn-sm">Клик</button>
                 <ul>
                     { this.state.tags.map( tag => <li key={tag} >{tag}</li>) }
@@ -31,10 +26,21 @@ class Counter extends Component {
         );
     }
 
-    formatCount() {
-        const { count } = this.state;
-        return count === 0 ? 'Zero' : count;
-    }
+
+
+
+
+
+
+
+
+
+
+
+    // formatCount() {
+    //     const { count } = this.state;
+    //     return count === 0 ? 'Zero' : count;
+    // }
 }
 
 export default Counter;
