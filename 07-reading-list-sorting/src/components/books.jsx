@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import BooksTable from './booksTable'
+import Like from './common/like';
 import { getBooks } from '../services/bookService';
 import { getGenres } from '../services/genreService';
 import ListGroup from './common/listGroup';
@@ -58,6 +58,24 @@ class Books extends Component {
     this.setState({ sortColumn, currentPage: 1 });
   }
 
+  raiseSort = path => {
+    // Testing:
+    // console.log(path)
+
+    const sortColumn = { ...this.props.sortColumn };
+
+    if (sortColumn.path === path) {
+      sortColumn.order = (sortColumn.order === 'asc') ? 'desc' : 'asc';
+    }
+    else {
+      sortColumn.path = path;
+      sortColumn.order = 'asc';
+    }
+
+    this.handleSort(sortColumn);
+    
+  }
+
   render() {
 
     if (this.state.books.length === 0) return <p>Здесь нет ни одной книги :(</p>
@@ -84,13 +102,31 @@ class Books extends Component {
         </div>
         <div className="col">
           <p>В списке книг: {filteredBooks.length}</p>
-          <BooksTable 
-            books={books}
-            sortColumn={this.state.sortColumn}
-            onLike={this.handleLike}
-            onDelete={this.handleDelete} 
-            onSort={this.handleSort}
-          />
+          <table className="table">
+            <thead>
+              <tr>
+                <th onClick={() => this.raiseSort('title')}>Название</th>
+                <th onClick={() => this.raiseSort('author')}>Автор</th>
+                <th onClick={() => this.raiseSort('genre.name')}>Жанр</th>
+                <th onClick={() => this.raiseSort('pages')}>Стр.</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {books.map(book => (
+                <tr key={book._id}>
+                  <td>{book.title}</td>
+                  <td>{book.author}</td>
+                  <td>{book.genre.name}</td>
+                  <td>{book.pages}</td>
+                  <td>
+                    <Like liked={book.liked} onLikeToggle={() => this.handleLike(book)} />
+                  </td>
+                  <td><button onClick={() => this.handleDelete(book)} className="btn btn-danger btn-sm">Удалить</button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
           <Pagination
             itemsCount={filteredBooks.length}
             pageSize={this.state.pageSize}
