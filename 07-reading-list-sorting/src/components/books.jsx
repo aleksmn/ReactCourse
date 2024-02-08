@@ -60,9 +60,9 @@ class Books extends Component {
 
   raiseSort = path => {
     // Testing:
-    // console.log(path)
+    console.log(path)
 
-    const sortColumn = { ...this.props.sortColumn };
+    const sortColumn = { ...this.state.sortColumn };
 
     if (sortColumn.path === path) {
       sortColumn.order = (sortColumn.order === 'asc') ? 'desc' : 'asc';
@@ -87,13 +87,14 @@ class Books extends Component {
 
     // Sorting
     const sortedBooks = _.orderBy(filteredBooks, [this.state.sortColumn.path], [this.state.sortColumn.order])
+    console.log(sortedBooks)
 
 
     const books = paginate(sortedBooks, this.state.currentPage, this.state.pageSize);
 
     return (
       <div className='row'>
-        <div className="col-2 my-5">
+        <div className="col-lg-2 my-5">
           <ListGroup
             items={this.state.genres}
             onItemSelect={this.handleGenreSelect}
